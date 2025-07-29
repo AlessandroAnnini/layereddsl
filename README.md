@@ -32,7 +32,7 @@ It provides:
 ## ✨ Key Advantages of DSL-First Development
 
 - **Determinism**: AI behavior becomes predictable and auditable.
-- **Clarity**: Everyone — devs, AI, and stakeholders shares the same model.
+- **Clarity**: Everyone from devs, AI, and stakeholders shares the same model.
 - **Scalability**: Works on small apps and large, distributed systems.
 - **Maintainability**: Changes in requirements affect only the map; code follows.
 - **Cross-language**: The same DSL can power implementations in any tech stack.

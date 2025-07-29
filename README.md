@@ -12,7 +12,7 @@
 
 It is designed to support **AI-assisted software development** by offering a clear, unambiguous blueprint of the system: data, logic, UI, workflows, security, and mappings. Instead of asking LLMs to work blindly across a massive codebase, developers and AI can collaborate **on the DSL map**, which becomes the **single source of truth**.
 
-Once the map is validated, AI can safely generate or validate the code — with zero hallucinations and full traceability.
+Once the map is validated, AI can safely generate or validate the code with zero hallucinations and full traceability.
 
 ---
 
@@ -32,7 +32,7 @@ It provides:
 ## ✨ Key Advantages of DSL-First Development
 
 - **Determinism**: AI behavior becomes predictable and auditable.
-- **Clarity**: Everyone — devs, AI, and stakeholders — shares the same model.
+- **Clarity**: Everyone — devs, AI, and stakeholders shares the same model.
 - **Scalability**: Works on small apps and large, distributed systems.
 - **Maintainability**: Changes in requirements affect only the map; code follows.
 - **Cross-language**: The same DSL can power implementations in any tech stack.
@@ -92,7 +92,7 @@ ui:
 2. ❌ Never infer logic beyond what's written.
 3. 🔄 Always map logic to components.
 4. 🔍 Use the DSL to check if code already exists.
-5. 🧠 Only generate missing parts if required — never the whole project.
+5. 🧠 Only generate missing parts if required, never the whole project.
 6. 💬 Accept edit instructions to update either DSL or code to match.
 
 ---
@@ -101,7 +101,7 @@ ui:
 
 1. **Define**: Human writes or co-writes DSL with AI help.
 2. **Validate**: AI compares DSL to codebase, flags gaps or mismatches.
-3. **Generate**: AI fills in only the missing or outdated parts — no freelancing.
+3. **Generate**: AI fills in only the missing or outdated parts... no freelancing.
 
 ---
 
@@ -118,4 +118,4 @@ We welcome improvements to prompt templates, DSL schema ideas, and automation to
 
 ---
 
-> **LayeredDSL is the interface between concept and implementation — for both humans and machines.**
+> **LayeredDSL is the interface between concept and implementation, for both humans and machines.**

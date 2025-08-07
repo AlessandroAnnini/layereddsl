@@ -1,6 +1,6 @@
-# LayeredDSL: Specification & Agent Guide
+# LayeredDSL v2.0: Specification & Agent Guide
 
-**A collaborative DSL-first architecture for building AI-aligned software.**
+**A collaborative DSL-first architecture for building AI-aligned software with formal contracts and comprehensive type systems.**
 
 > _"AI writes better code when you stop thinking in code."_  
 
@@ -8,11 +8,17 @@
 
 ## 📘 What is LayeredDSL?
 
-**LayeredDSL** is a structured YAML-based metamodel that describes software projects **at a conceptual level**, before any code is written — or alongside it.
+**LayeredDSL** is a structured YAML-based domain-specific language that describes software systems **at a conceptual level**, enabling deterministic AI-assisted code generation and validation.
 
-It is designed to support **AI-assisted software development** by offering a clear, unambiguous blueprint of the system: data, logic, UI, workflows, security, and mappings. Instead of asking LLMs to work blindly across a massive codebase, developers and AI can collaborate **on the DSL map**, which becomes the **single source of truth**.
+**Version 2.0** introduces major improvements:
 
-Once the map is validated, AI can safely generate or validate the code — with zero hallucinations and full traceability.
+- 🎯 **Formal AI Behavior Contracts** - Predictable AI interactions
+- 🔧 **Comprehensive Type System** - Primitive, composite, and custom types
+- 🏗️ **Extended Layer Architecture** - 7 distinct layers for complete system modeling
+- ⚡ **Enhanced Validation Rules** - Structural, semantic, and consistency checks
+- 🔄 **Version Compatibility Framework** - Seamless migration support
+
+Instead of asking LLMs to work blindly across massive codebases, developers and AI collaborate **on the DSL specification**, which becomes the **single source of truth** with complete traceability.
 
 ---
 
@@ -42,73 +48,202 @@ It provides:
 
 ---
 
-## 🧩 DSL Structure (at a Glance)
+## 🧩 DSL Structure v2.0 (Complete Architecture)
+
+LayeredDSL v2.0 organizes systems into **7 distinct layers** for comprehensive modeling:
 
 ```yaml
 project:
-  name: InvoiceManager
-  description: Track invoices and notify clients
+  name: TaskManager
+  description: Complete task management system
+  version: 1.0.0  # Project version
+  metadata:
+    dsl_version: '2.0'  # LayeredDSL specification version
+    author: 'Development Team'
 
+# 1. DOMAIN LAYER - Data models and entities
 domain:
-  Invoice:
+  Task:
     id: UUID
-    amount: float
-    status: enum[draft, paid]
+    title: string
+    status: enum[todo, in_progress, done]
+    assignee: optional[reference[User]]
+    created_at: datetime
 
+# 2. LOGIC LAYER - Business operations with contracts
 logic:
-  CreateInvoice:
-    inputs: [customerId, amount]
-    output: Invoice
-    modifies: Invoice
+  CreateTask:
+    inputs: [title, description]
+    output: Task
+    modifies: Task
+    preconditions: ["title is not empty"]
+    postconditions: ["task exists with given title"]
+    errors: [ValidationError, DatabaseError]
 
+# 3. COMPONENT LAYER - Implementation modules
 components:
-  - id: billing_service
+  - id: task_service
     type: module
     language: python
-    responsibilities:
-      - CreateInvoice
+    responsibilities: [CreateTask, UpdateTask]
+    dependencies: [database_service]
 
+# 4. WORKFLOW LAYER - Operation orchestration
 workflow:
-  - name: InvoiceLifecycle
+  - name: TaskCreationFlow
+    trigger: api_request
     steps:
-      - call: CreateInvoice
-      - call: NotifyCustomer
+      - call: ValidateInput
+      - call: CreateTask
+      - call: NotifyAssignee
+    error_handling: rollback
 
+# 5. UI LAYER - User interface structure
 ui:
   pages:
-    - name: Dashboard
-      route: "/"
+    - name: TaskDashboard
+      route: "/tasks"
       components:
-        - type: table
-          source: Invoice
-          columns: [customerId, amount, status]
+        - type: task_list
+          data_source: Task
+          actions: [create, edit, delete]
+
+# 6. INFRASTRUCTURE LAYER - Deployment and resources
+infrastructure:
+  deployment:
+    type: container
+    regions: [us-east-1]
+  resources:
+    - type: database
+      engine: postgresql
+      size: small
+
+# 7. SECURITY LAYER - Access control and policies
+security:
+  authentication:
+    type: jwt
+    provider: auth0
+  authorization:
+    roles: [admin, user, guest]
+    permissions:
+      - role: user
+        resources: [Task]
+        actions: [read, create, update]
 ```
 
 ---
 
-## 🤖 AI Behavior Rules
+## 🤖 AI Behavior Contracts v2.0
 
-1. ✅ Do **not generate code** unless the DSL is validated.
-2. ❌ Never infer logic beyond what's written.
-3. 🔄 Always map logic to components.
-4. 🔍 Use the DSL to check if code already exists.
-5. 🧠 Only generate missing parts if required — never the whole project.
-6. 💬 Accept edit instructions to update either DSL or code to match.
+**Formal contracts ensure predictable AI behavior:**
+
+### Generation Rules
+
+AI systems interacting with LayeredDSL MUST:
+
+1. ✅ **Never infer beyond specification** - Generate only what is explicitly defined
+2. 🔍 **Maintain traceability** - Every generated artifact must reference its DSL source
+3. 🏗️ **Respect layer boundaries** - Code for each layer must remain isolated
+4. ⚙️ **Validate before generation** - Ensure DSL validity before code generation
+5. 🔄 **Incremental generation** - Generate only missing or modified components
+
+### Validation Protocol
+
+1. Parse DSL document
+2. Validate structure against schema
+3. Check semantic consistency
+4. Compare with existing codebase
+5. Report discrepancies
+6. Generate validation report
+
+### Modification Protocol
+
+When receiving edit instructions, AI MUST:
+
+1. Identify target (DSL or code)
+2. Validate proposed changes
+3. Update DSL if structural change
+4. Regenerate affected code
+5. Maintain backward compatibility
 
 ---
 
-## 🔁 Human-AI Workflow
+## 🔁 Human-AI Workflow v2.0
 
-1. **Define**: Human writes or co-writes DSL with AI help.
-2. **Validate**: AI compares DSL to codebase, flags gaps or mismatches.
-3. **Generate**: AI fills in only the missing or outdated parts — no freelancing.
+**Enhanced collaborative development process:**
+
+1. **Define**: Human writes or co-writes DSL with AI assistance, leveraging the comprehensive type system
+2. **Validate**: AI performs structural, semantic, and consistency validation against the formal schema
+3. **Generate**: AI generates only missing or modified components with full traceability
+4. **Verify**: AI ensures generated code respects layer boundaries and contracts
+5. **Iterate**: Changes flow bidirectionally between DSL and code with version compatibility
+
+### Key v2.0 Enhancements
+
+- **Type Safety**: Comprehensive type system with primitives, composites, and custom types
+- **Error Handling**: Formal error categories with recovery strategies
+- **Version Migration**: Automated migration tools for specification updates
+- **Multi-Language Support**: Language-specific code generation with proper idioms
 
 ---
 
-## 📖 Related Reading
+## 🔧 Type System v2.0
 
-* 📰 [Medium article: From Chaos to Clarity — Why AI Writes Better Code When You Stop Thinking in Code](https://medium.com/@yourhandle)
-* 📚 [layered-dsl-guide.md](./layered-dsl-guide.md)
+**Comprehensive type safety for reliable code generation:**
+
+### Primitive Types
+
+- `string`, `int`, `float`, `boolean`
+- `UUID`, `datetime`, `date`, `time`
+- `json`, `binary`
+
+### Composite Types
+
+- `enum[value1, value2, ...]` - Enumeration of values
+- `array[<type>]` - Ordered collections
+- `map[<key_type>, <value_type>]` - Key-value pairs
+- `optional[<type>]` - Nullable types
+- `reference[<entity>]` - Foreign key references
+
+### Custom Types
+
+Define reusable types in the domain layer:
+
+```yaml
+domain:
+  Money:
+    amount: float
+    currency: enum[USD, EUR, GBP]
+  
+  Address:
+    street: string
+    city: string
+    postal_code: string
+```
+
+---
+
+## 🔄 Version Compatibility
+
+**Seamless migration between specification versions:**
+
+- **Semantic Versioning**: Major.Minor.Patch format
+- **Automated Migration**: Tools for upgrading between versions
+- **Backward Compatibility**: Gradual migration support
+- **Breaking Change Documentation**: Clear upgrade paths
+
+| DSL Spec Version | Breaking Changes | Migration Required |
+|------------------|------------------|--------------------|
+| 1.0.x → 2.0.x    | Complete redesign | Yes, automated tools available |
+| 2.0.x → 2.1.x    | None | No |
+
+---
+
+## 📚 Related Reading
+
+- 📄 [LayeredDSL Specifications v2.0](./layereddsl-specs.md) - Complete technical specification
+- 📰 [From Chaos to Clarity — Why AI Writes Better Code When You Stop Thinking in Code](https://medium.com/@yourhandle)
+- 📚 [layered-dsl-guide.md](./layered-dsl-guide.md) - Implementation guide
 
 ---
 
